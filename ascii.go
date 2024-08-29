@@ -23,10 +23,15 @@ func main() {
 		fmt.Println("Usage: go run . [STRING] [BANNER]\n\nEX: go run . something standard")
 		return
 	}
-
 	input := args[0]
-
-	Banner := "standard"
+	if !strings.HasSuffix(args[1], ".txt") {
+		args[1] += ".txt"
+	}
+	if args[1] != "standard.txt" && args[1] != "thinkertoy.txt" && args[1] != "shadow.txt" {
+		fmt.Println("Error : this style is unavailable \nPlease choose one of the available styles \n1 : standard \n2 : thinkertoy \n3 : shadow")
+		return
+	}
+	Banner := "standard.txt"
 	if len(args) == 2 {
 		Banner = args[1]
 	}
@@ -49,32 +54,16 @@ func main() {
 			}
 		}
 	}
-	if Banner == "standard" {
-		content, err = os.ReadFile("standard.txt")
-		if err != nil {
-			log.Fatal("Error : couldn't read file")
-		}
-
-	} else if Banner == "thinkertoy" {
-		content, err = os.ReadFile("thinkertoy.txt")
-		if err != nil {
-			log.Fatal("Error : couldn't read file")
-		}
-
-	} else if Banner == "shadow" {
-		content, err = os.ReadFile("shadow.txt")
-		if err != nil {
-			log.Fatal("Error : couldn't read file")
-		}
+	content, err = os.ReadFile(Banner)
+	if err != nil {
+		log.Fatal("Error : couldn't read file")
 	}
+
 	Replace := make(map[rune][]string)
 	Char := 32
 	noreturn := strings.ReplaceAll(string(content), "\r", "")
 	Lines := strings.Split(noreturn, "\n")
 	for i := 0; i < len(Lines); i += 9 {
-		// if i == 0 || (i*9)%9 == 0 {
-		// 	continue
-		// }
 		if i+9 <= len(Lines)-1 {
 			Replace[rune(Char)] = Lines[i+1 : i+9]
 		}
@@ -91,25 +80,11 @@ func main() {
 		}
 		for i := 0; i < 8; i++ {
 			for j := 0; j < len(line); j++ {
-				// for k := 0; k <= 7; k++ {
 				inputrune := rune(line[j])
-
 				fmt.Print(Replace[inputrune][i])
-
-				// }
 			}
 			fmt.Println()
 		}
 	}
 
-	// for k := 0 ; k < len(Replace[inputrune][j]) ; k++ {}
-
-	// for i := 0; i <= len(INP); i++ {
-
-	// 	fmt.Println(Replace[INP][i])
-
-	// }
-	// for i := 0; i < len(Replace['A']); i++ {
-	// 	fmt.Println("replace of AB! is : ", Replace['A'][i], " ", Replace['B'][i], Replace['!'][i])
-	// }
 }
